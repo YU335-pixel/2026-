@@ -1,0 +1,14 @@
+{
+  "changes": [
+    {
+      "clientName": "山田太郎",
+      "clientId": null,
+      "visitDate": "2026-07-15",
+      "originalStartTime": "09:00",
+      "newStartTime": "10:00",
+      "newEndTime": "11:00",
+      "visitType": "身体介護",
+      "note": "利用者都合による時間変更"
+    }
+  ]
+}

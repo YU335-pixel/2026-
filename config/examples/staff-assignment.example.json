@@ -1,0 +1,15 @@
+{
+  "assignments": [
+    {
+      "staffName": "佐藤花子",
+      "staffId": null,
+      "clientName": "山田太郎",
+      "clientId": null,
+      "visitDate": "2026-07-15",
+      "startTime": "09:00",
+      "endTime": "10:00",
+      "visitType": "身体介護",
+      "replaceExistingStaff": false
+    }
+  ]
+}
