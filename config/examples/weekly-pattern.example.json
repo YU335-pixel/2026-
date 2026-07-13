@@ -1,0 +1,20 @@
+{
+  "pattern": [
+    {
+      "weekday": "月",
+      "clientName": "山田太郎",
+      "startTime": "09:00",
+      "endTime": "10:00",
+      "staffName": "佐藤花子",
+      "visitType": "身体介護"
+    },
+    {
+      "weekday": "水",
+      "clientName": "山田太郎",
+      "startTime": "09:00",
+      "endTime": "10:00",
+      "staffName": "田中一郎",
+      "visitType": "身体介護"
+    }
+  ]
+}

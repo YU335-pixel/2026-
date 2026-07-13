@@ -22,19 +22,19 @@ cp .env.example .env
 # .env を開き、KAIPOKE_CORP_ID / KAIPOKE_USER_ID / KAIPOKE_PASSWORD を設定
 ```
 
-## 実際のセレクタを記録する（初回のみ・必須）
+## セレクタについて
 
-このツールは現時点でカイポケの実際の画面構造（ログインフォーム・スケジュール変更画面・
-スタッフ割当画面）を知りません。[docs/RECORDING_WORKFLOWS.md](docs/RECORDING_WORKFLOWS.md) の
-手順に従って `playwright codegen` で実際の操作を記録し、以下のファイルの `SELECTORS` を
-埋めてください:
+ログイン・スケジュール一覧・訪問編集ポップアップの実際のセレクタは、`playwright codegen` で
+記録した内容をもとに以下のファイルへ反映済みです（[docs/RECORDING_WORKFLOWS.md](docs/RECORDING_WORKFLOWS.md)
+に記録手順を残しています。カイポケ側の画面が変わった場合は同じ手順で再取得してください）:
 
-- `src/auth.js`
-- `src/operations/scheduleChange.js`
-- `src/operations/staffAssignment.js`
+- `src/auth.js`（ログイン）
+- `src/navigation.js`（レセプト→訪問看護→職員絞り込み→週送り）
+- `src/operations/scheduleTable.js`（訪問予定の検索）
+- `src/operations/visitPopup.js`（訪問編集ポップアップの時刻・スタッフ操作）
 
-`SELECTORS` に `null` が残っている項目があると、実行時に明示的なエラーで停止します
-（未設定のまま誤操作するのを防ぐための安全策です）。
+なお `src/navigation.js` 内の「訪問看護/2860991096」はこの事業所固有のリンク文言です。
+別の事業所で使う場合は実際の画面のリンク文言に置き換えてください。
 
 ## 使い方
 
@@ -54,6 +54,30 @@ node scripts/change-schedule.js runs/my-changes.json              # 変更ごと
 node scripts/assign-staff.js runs/my-assignments.json --dry-run
 node scripts/assign-staff.js runs/my-assignments.json
 ```
+
+### 曜日ごとの訪問パターンから1ヶ月分をまとめて生成する
+
+毎週だいたい同じ利用者・時間・担当スタッフのパターンが決まっている場合、
+`config/examples/weekly-pattern.example.json` を参考に曜日ごとのルールを1度書いておけば、
+指定した期間の日付ごとの割当リストを自動生成できます（ブラウザは操作しない、ローカルの
+ファイル変換のみです）。
+
+```bash
+node scripts/generate-assignments.js config/weekly-pattern.json \
+  --from 2026-08-01 --to 2026-08-31 \
+  --out runs/2026-08-assignments.json
+```
+
+生成されたファイルは**必ず開いて内容を確認し、イレギュラー（スタッフの休み・利用者都合など）が
+ある日を手直ししてから**、通常通り実行してください:
+
+```bash
+node scripts/assign-staff.js runs/2026-08-assignments.json --dry-run
+node scripts/assign-staff.js runs/2026-08-assignments.json
+```
+
+生成された各項目は安全のため `replaceExistingStaff: false` になっています。既に別のスタッフが
+割り当たっている枠にパターン通り強制上書きしたい場合は、該当項目を `true` に変更してください。
 
 ### 共通オプション
 

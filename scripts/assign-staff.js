@@ -7,6 +7,7 @@ const { Logger } = require("../src/logger");
 const { parseArgs, confirmChange } = require("../src/cli");
 const { launchContext, saveSessionState, closeContext } = require("../src/browser");
 const { login } = require("../src/auth");
+const { goToStaffSchedule } = require("../src/navigation");
 const {
   applyAssignment,
   AmbiguousMatchError,
@@ -36,6 +37,7 @@ async function main() {
   try {
     await login(page, config, logger);
     await saveSessionState(context, config);
+    await goToStaffSchedule(page);
 
     for (const item of parsed.assignments) {
       const diffText = formatDiff(item);

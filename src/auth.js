@@ -5,21 +5,17 @@
  * 従って `playwright codegen` でログインフローを記録し、実際のセレクタに置き換えてください。
  */
 
-const LOGIN_URL = "https://example.invalid/TODO-replace-with-real-kaipoke-login-url";
+const LOGIN_URL = "https://r.kaipoke.biz/kaipokebiz/login/COM020102.do?code=login/";
 
 // 各値は (page) => Locator を返す関数として設定する。
-// 例: corpIdInput: (page) => page.getByLabel("法人ID")
 const SELECTORS = {
-  // TODO: 法人IDの入力欄
-  corpIdInput: null,
-  // TODO: ユーザーIDの入力欄
-  userIdInput: null,
-  // TODO: パスワードの入力欄
-  passwordInput: null,
-  // TODO: ログインボタン
-  submitButton: null,
-  // TODO: ログイン成功後にのみ存在する要素（ログイン判定用）
-  loggedInIndicator: null,
+  corpIdInput: (page) => page.locator('[id="form:corporation_id"]'),
+  userIdInput: (page) => page.locator('[id="form:member_login_id"]'),
+  passwordInput: (page) => page.locator('[id="form:password"]'),
+  submitButton: (page) => page.getByRole("button", { name: "Submit" }),
+  // ログイン後に必ず表示される要素として「レセプト」リンクを仮採用。
+  // 他にもっと確実な要素があれば教えてください。
+  loggedInIndicator: (page) => page.getByRole("link", { name: "レセプト" }),
 };
 
 class LoginError extends Error {
