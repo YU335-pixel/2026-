@@ -51,6 +51,15 @@ async function login(page, config, logger) {
   assertSelectorsConfigured();
 
   await page.goto(LOGIN_URL);
+
+  // storageState再利用により、ログインページへ遷移しても既にログイン済みで
+  // 別画面へリダイレクトされることがある。その場合はフォーム入力をスキップする。
+  const alreadyLoggedIn = await isLoggedIn(page, { timeoutMs: 3000 });
+  if (alreadyLoggedIn) {
+    logger?.info("already logged in (session reused)");
+    return;
+  }
+
   await SELECTORS.corpIdInput(page).fill(config.corpId);
   await SELECTORS.userIdInput(page).fill(config.userId);
   await SELECTORS.passwordInput(page).fill(config.password);

@@ -34,6 +34,10 @@ async function goToStaffSchedule(page) {
   const allValues = await groupSelect.locator("option").evaluateAll((opts) => opts.map((o) => o.value));
   await groupSelect.selectOption(allValues);
 
+  // selectOptionがカイポケ側の画面更新（ポストバック）を引き起こすことがあり、
+  // それが終わる前に次のgoto()を発行すると ERR_ABORTED になる。落ち着くまで待つ。
+  await page.waitForLoadState("networkidle").catch(() => {});
+
   await page.goto(STAFF_SCHEDULE_URL);
 }
 
