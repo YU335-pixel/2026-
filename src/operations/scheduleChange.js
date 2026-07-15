@@ -44,6 +44,8 @@ async function applyChange(page, item, { dryRun, diagnosticsDir } = {}) {
   await link.click();
 
   await visitPopup.setTime(page, item.newStartTime, item.newEndTime);
+  // スタッフを変更しない場合でも、このボタンを押さないと登録ボタンがdisabledのままになる。
+  await visitPopup.openStaffEntry(page);
 
   if (dryRun) {
     if (diagnosticsDir) {

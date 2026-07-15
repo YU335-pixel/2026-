@@ -45,7 +45,7 @@ async function applyAssignment(page, item, { dryRun, diagnosticsDir } = {}) {
 
   if (dryRun) {
     // dry-runでは職員情報入力ボタンまでは押すが、選択肢の確定・保存はしない。
-    await visitPopup.SELECTORS.staffEntryButton(page).click();
+    await visitPopup.openStaffEntry(page);
     if (diagnosticsDir) {
       fs.mkdirSync(diagnosticsDir, { recursive: true });
       const file = path.join(

@@ -37,8 +37,17 @@ async function setTime(page, startTime, endTime) {
   await SELECTORS.endMinuteSelect(page).selectOption(String(Number(endMinute)));
 }
 
-async function assignStaff(page, staffName, { replaceExisting = false } = {}) {
+/**
+ * 「職員情報入力」ボタンを押す。実際のカイポケ画面では、スタッフを変更しない
+ * 場合でもこのボタンを押さないと「登録する」がdisabledのままになるため、
+ * スケジュール変更（スタッフ変更なし）でも必ず呼び出す必要がある。
+ */
+async function openStaffEntry(page) {
   await SELECTORS.staffEntryButton(page).click();
+}
+
+async function assignStaff(page, staffName, { replaceExisting = false } = {}) {
+  await openStaffEntry(page);
   const select = SELECTORS.staffSelect(page);
   const currentLabel = await select.evaluate((el) => el.options[el.selectedIndex]?.text?.trim() || "");
   if (currentLabel && currentLabel !== staffName && !replaceExisting) {
@@ -57,4 +66,4 @@ async function save(page) {
   await button.waitFor({ state: "hidden", timeout: 10000 });
 }
 
-module.exports = { SELECTORS, setDate, setTime, assignStaff, save, PopupError };
+module.exports = { SELECTORS, setDate, setTime, assignStaff, openStaffEntry, save, PopupError };
